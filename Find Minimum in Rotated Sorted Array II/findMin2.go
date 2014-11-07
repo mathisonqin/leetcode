@@ -11,8 +11,10 @@ func rotateArray1(a []int, pos int) {
 	if pos < 0 {
 		return
 	}
+
 	lenA := len(a)
 	pos = pos % lenA
+
 	tmpArray := make([]int, pos)
 	for i := 0; i < pos; i++ {
 		tmpArray[i] = a[i]
@@ -31,14 +33,13 @@ func rotateArray2(a []int, pos int) {
 	if pos < 0 {
 		return
 	}
+
 	lenA := len(a)
 	pos = pos % lenA
-	//sort.Sort(sort.Reverse(sort.IntSlice(a[0:pos])))
-	//sort.Sort(sort.Reverse(sort.IntSlice(a[pos:])))
+
 	reverseArray(a[:pos])
 	reverseArray(a[pos:])
 	reverseArray(a)
-	//sort.Sort(sort.Reverse(sort.IntSlice(a[0:])))
 }
 
 func reverseArray(a []int) {
@@ -55,9 +56,8 @@ func main() {
 		rand.Seed(int64(seedNum) + time.Now().UnixNano())
 		seedNum++
 		a[i] = rand.Intn(20)
-		// fmt.Println(value)
 	}
-	//a := []int{3, 1, 1, 3, 3, 3}
+
 	fmt.Println("-------")
 	sort.Ints(a)
 
@@ -67,7 +67,6 @@ func main() {
 	rotateArray2(a, rotatePos)
 	fmt.Printf("rotated array:%v\n", a)
 	//sort.Sort(sort.Reverse(sort.IntSlice(a[])))
-
 	fmt.Println(findMin(a))
 }
 
