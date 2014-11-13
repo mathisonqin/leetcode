@@ -53,7 +53,20 @@ func Traverse(node *Node) {
 }
 
 func TraverseNonRec(node *Node) {
+	cur := node
+	stack := []*Node{}
+	var tmpNode *Node
+	for cur != nil || len(stack) != 0 {
+		fmt.Printf("%d\t", cur.value)
+		stack = append(stack, cur)
+		cur = cur.left
 
+		for cur == nil && len(stack) != 0 {
+
+			tmpNode, stack = stack[len(stack)-1], stack[:len(stack)-1]
+			cur = tmpNode.right
+		}
+	}
 }
 
 func main() {
@@ -70,6 +83,7 @@ func main() {
 	fmt.Println("----------")
 	//Traverse(b.root)
 	TraverseNonRec(b.root)
+	fmt.Println("")
 	end := time.Now().UnixNano()
 	//fmt.Println(time.Second)
 	cost := float64((end - start)) / float64(time.Second.Nanoseconds())
