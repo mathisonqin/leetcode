@@ -53,33 +53,7 @@ func Traverse(node *Node) {
 }
 
 func TraverseNonRec(node *Node) {
-	if node == nil {
-		return
-	}
-	stack := make([]*Node, 0)
-	stack = append(stack, node)
-	fmt.Printf("%d\t", node.value)
-	var tmpNode *Node
-	tmpNode = stack[len(stack)-1]
-	for len(stack) != 0 {
 
-		for tmpNode.left != nil {
-			stack = append(stack, tmpNode.left)
-			fmt.Printf("%d\t", tmpNode.left.value)
-			tmpNode = tmpNode.left
-		}
-		stack = stack[:len(stack)-1]
-		tmpNode = stack[len(stack)-1]
-		if tmpNode.right != nil {
-			stack = append(stack, tmpNode.right)
-			fmt.Printf("%d\t", tmpNode.right.value)
-			tmpNode = tmpNode.right
-			continue
-		}
-		tmpNode = stack[len(stack)-1].right
-		stack = stack[:len(stack)-1]
-
-	}
 }
 
 func main() {
