@@ -28,7 +28,6 @@ func (b *BTree) Insert(value int) (tmpNode *Node) {
 }
 
 func (b *BTree) addNode(parent *Node, node *Node) *Node {
-
 	if parent == nil {
 		return node
 	}
