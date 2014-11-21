@@ -93,4 +93,4 @@ func findMin(arrItem []int) int {
 	} else {
 		return arrItem[high]
 	}
-}
+}.
