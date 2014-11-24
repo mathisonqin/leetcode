@@ -2,8 +2,6 @@ package main
 
 import (
 	"fmt"
-	//"math/rand"
-	//"time"
 )
 
 type Graph struct {
@@ -26,7 +24,7 @@ func (graph *Graph) PrintGraphMatrix() {
 func CreateGraph() *Graph {
 	graph := new(Graph)
 	graph.vertex = []byte{'A', 'B', 'C', 'D', 'E', 'F', 'G'}
-	edge := [][]byte{{'A', 'C'}, {'A', 'D'}, {'C', 'D'}, {'E', 'F'}, {'D', 'G'}}
+	edge := [][]byte{{'A', 'C'}, {'A', 'D'}, {'C', 'D'}, {'E', 'F'}, {'D', 'G'}, {'D', 'E'}}
 	fmt.Println(edge)
 
 	//建立顶点与数组下标的map数组
@@ -51,22 +49,60 @@ func CreateGraph() *Graph {
 		fmt.Println(item)
 		i := mapVetex[v0]
 		j := mapVetex[v1]
-		//fmt.Printf("%d,%d", i, j)
-		//graph.edge[i][j] = true
 		graph.edge[i][j] = 1
 	}
-	//graph.edge = [][]bool{}
-	//graph.vertex
 	return graph
+}
+
+func (graph *Graph) Neighbor(i int) func() (int, bool) {
+	index := 0
+	return func() (pos int, ok bool) {
+		for {
+			if index >= len(graph.vertex) {
+				return
+			}
+
+			if graph.edge[i][index] == 1 {
+				pos, ok = index, true
+				index++
+				return
+			}
+			index++
+			//pos, ok =
+		}
+
+	}
 }
 
 func (graph *Graph) DFSTraverse() {
 	//初始化visited函数
 	visited := make([]bool, len(graph.vertex))
+
+	for i := 0; i < len(visited); i++ {
+		if !visited[i] {
+			graph.DFS(i, visited)
+		}
+	}
+}
+
+func (graph *Graph) DFS(i int, visited []bool) {
+	if i >= len(visited) || visited[i] {
+		return
+	}
+	fmt.Printf("%c ", graph.vertex[i])
+	visited[i] = true //标识为已访问
+
+	neighbor := graph.Neighbor(i)
+	for {
+		n, ok := neighbor()
+		if !ok {
+			break
+		}
+		graph.DFS(n, visited)
+	}
 }
 func main() {
-
-	//fmt.Println(graph)
 	graph := CreateGraph()
 	graph.PrintGraphMatrix()
+	graph.DFSTraverse()
 }
