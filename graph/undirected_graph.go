@@ -24,7 +24,7 @@ func (graph *Graph) PrintGraphMatrix() {
 func CreateGraph() *Graph {
 	graph := new(Graph)
 	graph.vertex = []byte{'A', 'B', 'C', 'D', 'E', 'F', 'G'}
-	edge := [][]byte{{'A', 'C'}, {'A', 'D'}, {'C', 'D'}, {'E', 'F'}, {'D', 'G'}, {'D', 'E'}}
+	edge := [][]byte{{'A', 'B'}, {'A', 'D'}, {'C', 'D'}, {'E', 'F'}, {'D', 'G'}, {'D', 'E'}, {'B', 'C'}}
 	fmt.Println(edge)
 
 	//建立顶点与数组下标的map数组
@@ -50,6 +50,7 @@ func CreateGraph() *Graph {
 		i := mapVetex[v0]
 		j := mapVetex[v1]
 		graph.edge[i][j] = 1
+		graph.edge[j][i] = 1
 	}
 	return graph
 }
@@ -77,7 +78,6 @@ func (graph *Graph) Neighbor(i int) func() (int, bool) {
 func (graph *Graph) DFSTraverse() {
 	//初始化visited函数
 	visited := make([]bool, len(graph.vertex))
-
 	for i := 0; i < len(visited); i++ {
 		if !visited[i] {
 			graph.DFS(i, visited)
@@ -101,8 +101,47 @@ func (graph *Graph) DFS(i int, visited []bool) {
 		graph.DFS(n, visited)
 	}
 }
+
+func (graph *Graph) BFS(i int, visited []bool, queue []int) {
+	//var cur int
+	queue = queue[1:] //出栈
+	//fmt.Printf("%c ", graph.vertex[cur])
+	//visited[cur] = true
+	neighbor := graph.Neighbor(i)
+	for {
+		n, ok := neighbor()
+		if !ok {
+			break
+		}
+		if !visited[n] {
+			queue = append(queue, n)
+			fmt.Printf("%c ", graph.vertex[n])
+			visited[n] = true
+		}
+	}
+	if len(queue) != 0 {
+		i = queue[0]
+		graph.BFS(i, visited, queue)
+	}
+}
+
+func (graph *Graph) BFSTraverse() {
+	visited := make([]bool, len(graph.vertex))
+	queue := make([]int, 0)
+	for i := 0; i < len(visited); i++ {
+		if !visited[i] {
+			queue = append(queue, i)
+			visited[i] = true
+			fmt.Printf("%c ", graph.vertex[i])
+			graph.BFS(i, visited, queue)
+		}
+	}
+}
+
 func main() {
 	graph := CreateGraph()
 	graph.PrintGraphMatrix()
 	graph.DFSTraverse()
+	fmt.Println()
+	graph.BFSTraverse()
 }
