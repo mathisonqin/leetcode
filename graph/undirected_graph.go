@@ -127,13 +127,14 @@ func (graph *Graph) BFS(i int, visited []bool, queue []int) {
 
 func (graph *Graph) BFS1(i int, visited []bool, queue []int) {
 	var n int
+	var ok bool
 	var neighbor func() (int, bool)
 	for len(queue) > 0 {
 		n, queue = queue[0], queue[1:]
 		fmt.Printf("%c ", graph.vertex[n])
 		neighbor = graph.Neighbor(n)
 		for {
-			n, ok := neighbor()
+			n, ok = neighbor()
 			if !ok {
 				break
 			}
