@@ -16,28 +16,34 @@ func main() {
 
 func findLadders(mapAdjacency map[string][]string, start, end string) {
 	//visited := make([]bool, )
-	visited := make(map[string]bool, len(mapAdjacency))
-	visited[start] = true
+	visited := make(map[string]int, len(mapAdjacency))
+	visited[start] = 1
 	queue := make([]string, len(mapAdjacency))
 	queue = append(queue, start)
-	mapParent := make(map[string]string, len(mapAdjacency))
-	mapParent[start] = ""
+	mapParent := make(map[string][]string, len(mapAdjacency))
+	//mapParent[start] = nil
 	bfs(mapAdjacency, visited, queue, mapParent, start, end)
 	printShortestPath(mapParent, start, end)
 	//fmt.Println(mapParent)
 }
 
-func printShortestPath(mapParent map[string]string, start, end string) {
+func printShortestPath(mapParent map[string][]string, start, end string) {
+	fmt.Println(mapParent)
+	stack := make([]string)
+	stack = append(stack, end)
 	tmp := end
-
-	for mapParent[tmp] != "" {
-		fmt.Printf("%s ", tmp)
-		tmp = mapParent[tmp]
+	if tmp == start {
+		printStack()
+		return
 	}
-	fmt.Printf("%s ", tmp)
+	//for mapParent[tmp] != "" {
+	//	fmt.Printf("%s ", tmp)
+	//	tmp = mapParent[tmp]
+	//}
+	//fmt.Printf("%s ", tmp)
 }
 
-func bfs(mapAdjacency map[string][]string, visited map[string]bool, queue []string, mapParent map[string]string, start string, end string) {
+func bfs(mapAdjacency map[string][]string, visited map[string]int, queue []string, mapParent map[string][]string, start string, end string) {
 	var cur string
 	for len(queue) > 0 {
 		//出队列
@@ -46,11 +52,13 @@ func bfs(mapAdjacency map[string][]string, visited map[string]bool, queue []stri
 		//	break
 		//}
 		for _, value := range mapAdjacency[cur] {
-			if visited[value] == false {
+			if visited[value] == 0 {
 				//入队列
 				queue = append(queue, value)
-				visited[value] = true
-				mapParent[value] = cur
+				visited[value] = visited[cur] + 1
+				mapParent[value] = append(mapParent[value], cur)
+			} else if visited[value] > visited[cur] {
+				mapParent[value] = append(mapParent[value], cur)
 			}
 
 		}
