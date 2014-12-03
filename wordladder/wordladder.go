@@ -5,42 +5,50 @@ import (
 )
 
 func main() {
-	dict := []string{"hot", "dot", "dog", "lot", "log"}
 	start := "hit"
 	end := "cog"
+	dict := []string{"hot", "dot", "dog", "lot", "log"}
 	dict = append(dict, start, end)
-	//fmt.Println(start, end, dict)
+
 	mapAdjacency := createAdjacencyGraph(dict, start, end)
 	findLadders(mapAdjacency, start, end)
 }
 
 func findLadders(mapAdjacency map[string][]string, start, end string) {
-	//visited := make([]bool, )
 	visited := make(map[string]int, len(mapAdjacency))
 	visited[start] = 1
+
 	queue := make([]string, len(mapAdjacency))
 	queue = append(queue, start)
+
 	mapParent := make(map[string][]string, len(mapAdjacency))
-	//mapParent[start] = nil
+
 	bfs(mapAdjacency, visited, queue, mapParent, start, end)
-	printShortestPath(mapParent, start, end)
-	//fmt.Println(mapParent)
+
+	stack := []string{}
+	stack = append(stack, end)
+	printShortestPath(mapParent, stack, start, end)
 }
 
-func printShortestPath(mapParent map[string][]string, start, end string) {
-	fmt.Println(mapParent)
-	stack := make([]string)
-	stack = append(stack, end)
-	tmp := end
-	if tmp == start {
-		printStack()
+func printShortestPath(mapParent map[string][]string, stack []string, start, end string) {
+	if end == start {
+		printStack(stack)
 		return
 	}
-	//for mapParent[tmp] != "" {
-	//	fmt.Printf("%s ", tmp)
-	//	tmp = mapParent[tmp]
-	//}
-	//fmt.Printf("%s ", tmp)
+
+	for _, v := range mapParent[end] {
+		stack = append(stack, v)
+		printShortestPath(mapParent, stack, start, v)
+		stack = stack[:len(stack)-1]
+	}
+}
+
+func printStack(stack []string) {
+	lenStack := len(stack)
+	for i := lenStack - 1; i >= 0; i-- {
+		fmt.Printf("%s ", stack[i])
+	}
+	fmt.Println()
 }
 
 func bfs(mapAdjacency map[string][]string, visited map[string]int, queue []string, mapParent map[string][]string, start string, end string) {
@@ -48,9 +56,6 @@ func bfs(mapAdjacency map[string][]string, visited map[string]int, queue []strin
 	for len(queue) > 0 {
 		//出队列
 		cur, queue = queue[0], queue[1:]
-		//if cur == end {
-		//	break
-		//}
 		for _, value := range mapAdjacency[cur] {
 			if visited[value] == 0 {
 				//入队列
@@ -86,6 +91,5 @@ func createAdjacencyGraph(dict []string, start, end string) (mapAdjacency map[st
 		}
 	}
 
-	//fmt.Println(mapAdjacency)
 	return
 }
