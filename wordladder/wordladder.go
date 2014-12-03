@@ -51,7 +51,8 @@ func printStack(stack []string) {
 	fmt.Println()
 }
 
-func bfs(mapAdjacency map[string][]string, visited map[string]int, queue []string, mapParent map[string][]string, start string, end string) {
+func bfs(mapAdjacency map[string][]string, visited map[string]int, queue []string,
+	mapParent map[string][]string, start string, end string) {
 	var cur string
 	for len(queue) > 0 {
 		//出队列
