@@ -41,7 +41,8 @@ func DFSTraverse(arr [][]byte, word []byte, arrI []int, arrJ []int) (ret bool) {
 
 //dfs traverse, when found return true
 func DFS(arr [][]byte, word []byte, index int, visited [][]bool, i int, j int) (ret bool) {
-	if i < 0 || j < 0 || i >= len(visited) || j >= len(visited[i]) || visited[i][j] {
+	if i < 0 || j < 0 || i >= len(visited) ||
+		j >= len(visited[i]) || visited[i][j] {
 		return false
 	}
 	if index == len(word) {
