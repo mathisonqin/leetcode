@@ -3,7 +3,10 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"log"
+	"net/http"
 	"strings"
+	//"time"
 )
 
 func main() {
@@ -12,14 +15,40 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	//fmt.Println(string(fileData))
+
 	urls := strings.Split(string(fileData), "\n")
+	done := make(chan string)
+
 	for _, url := range urls {
 		fmt.Println(url)
-		go getIpLocation(url)
+		url = strings.Trim(url, "\n\r")
+		go getIpLocation(done, url)
 	}
+	lenUrl := len(urls)
+	count := 0
+	for {
+		<-done
+		count++
+		if count >= lenUrl {
+			break
+		}
+
+	}
+
 }
 
-func getIpLocation(ip string) {
+func getIpLocation(done chan string, ip string) {
+	res, err := http.Get("http://ip.taobao.com/service/getIpInfo.php?ip=" + ip)
+	if err != nil {
+		fmt.Println("error")
+		log.Fatal(err)
+	}
 
+	robots, err := ioutil.ReadAll(res.Body)
+	res.Body.Close()
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("%s\n", robots)
+	done <- "done"
 }
