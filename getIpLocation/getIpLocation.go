@@ -50,5 +50,5 @@ func getIpLocation(done chan string, ip string) {
 		log.Fatal(err)
 	}
 	fmt.Printf("%s\n", robots)
-	done <- "done"
+	defer func() { done <- "done" }()
 }
