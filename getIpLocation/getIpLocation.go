@@ -40,7 +40,6 @@ func main() {
 func getIpLocation(done chan string, ip string) {
 	res, err := http.Get("http://ip.taobao.com/service/getIpInfo.php?ip=" + ip)
 	if err != nil {
-		fmt.Println("error")
 		log.Fatal(err)
 	}
 
