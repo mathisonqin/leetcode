@@ -25,15 +25,41 @@ func uniquePathsDp(m int, n int) int {
 	for i := 0; i < lenRow; i++ {
 		arrPath[i] = make([]int, n)
 	}
-	fmt.Println(arrPath)
-	return 0
+
+	return pathsNum(m, n, arrPath)
+}
+
+func pathsNum(m, n int, arrPath [][]int) int {
+	if m < 1 || n < 1 {
+		return 0
+	}
+	if m == 1 || n == 1 {
+		return 1
+	}
+	if arrPath[m-1][n-1] != 0 {
+		return arrPath[m-1][n-1]
+	}
+
+	arrPath[m-2][n-1] = pathsNum(m-1, n, arrPath)
+	arrPath[m-1][n-2] = pathsNum(m, n-1, arrPath)
+	return arrPath[m-2][n-1] + arrPath[m-1][n-2]
 }
 
 func main() {
+	fmt.Println("-------------DFS solution------------")
 	startTime := time.Now().UnixNano()
-	num := uniquePathsDp(10, 10)
+	num := uniquePaths(17, 17)
 	endTime := time.Now().UnixNano()
-	fmt.Println(num)
-	cost := (endTime - startTime) / 1000
+	fmt.Printf("paths:%d\n", num)
+	cost := (endTime - startTime) / 1000000
+	fmt.Printf("cost:%d(ms)\n", cost)
+
+	fmt.Println("-------------DP solution------------")
+	startTime = time.Now().UnixNano()
+	num = uniquePathsDp(17, 17)
+	endTime = time.Now().UnixNano()
+	fmt.Printf("paths:%d\n", num)
+	cost = (endTime - startTime) / 1000
 	fmt.Printf("cost:%d(ms)", cost)
+
 }
